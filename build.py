@@ -1,8 +1,12 @@
 import os
 import shutil
 import sys
-from distutils.command.build_ext import build_ext
-from distutils.core import Distribution, Extension
+
+# from distutils.command.build_ext import build_ext
+# from distutils.core import Distribution, Extension
+from setuptools import setup, Extension
+from setuptools.command.build_ext import build_ext
+from setuptools.dist import Distribution
 
 from Cython.Build import cythonize
 import numpy as np
@@ -14,7 +18,7 @@ libraries = ["m"]
 
 
 def build():
-    debug_mode_on = '1' if 'debug_mode_on' in os.environ else '0'
+    debug_mode_on = "1" if "debug_mode_on" in os.environ else "0"
     extensions = [
         Extension(
             "*",
@@ -22,11 +26,13 @@ def build():
             extra_compile_args=compile_args,
             extra_link_args=link_args,
             include_dirs=include_dirs,
-            libraries=libraries if os.name != 'nt' else [],
-            define_macros=[('CYTHON_TRACE', debug_mode_on),
-                           ('CYTHON_TRACE_NOGIL', debug_mode_on),
-                           ('CYTHON_BINDING', debug_mode_on),
-                           ('CYTHON_FAST_PYCCALL', '1')],
+            libraries=libraries if os.name != "nt" else [],
+            define_macros=[
+                ("CYTHON_TRACE", debug_mode_on),
+                ("CYTHON_TRACE_NOGIL", debug_mode_on),
+                ("CYTHON_BINDING", debug_mode_on),
+                ("CYTHON_FAST_PYCCALL", "1"),
+            ],
         )
     ]
     ext_modules = cythonize(
